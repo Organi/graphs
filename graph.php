@@ -13,7 +13,7 @@ class GRAPH {
 
 	public function addNode($node) {
 		$key = uniqid();
-		$nodes[$key] = $node;
+		$this->nodes[$key] = $node;
 	}
 
 	public function removeNode($key) {
@@ -22,11 +22,16 @@ class GRAPH {
 	}
 
 	public function addPath($v1, $v2, $value) {
-		// Check if a path already exists between them
-		if ($this->existsPath($v1, $v2)) {
+		if (!in_array($v1, $this->nodes) || !in_array($v2, $this->nodes)) {
 			return false;
 		}
-		$paths[] = Array(
+		$v1 = array_search($v1, $this->nodes);
+		$v2 = array_search($v2, $this->nodes);
+		// Check if a path already exists between them
+//		if ($this->existsPath($v1, $v2)) {
+//			return false;
+//		}
+		$this->paths[] = Array(
 			'v1' => $v1,
 			'v2' => $v2,
 			'dt' => $value
@@ -34,10 +39,12 @@ class GRAPH {
 	}
 
 	public function removePath($v1, $v2) {
-		foreach($paths as $key=>$path) {
+		$v1 = array_search($v1, $this->nodes);
+		$v2 = array_search($v2, $this->nodes);
+		foreach($this->paths as $key=>$path) {
 			if ($path['v1'] == $v1 && $path['v2'] == $v2
 				|| $path['v1'] == $v2 && $path['v2'] == $v1) {
-					unset($key);
+					unset($this->paths[$key]);
 			}
 		}
 	}
